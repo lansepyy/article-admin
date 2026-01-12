@@ -2,10 +2,8 @@ import {
   LayoutDashboard,
   ListTodo,
   HelpCircle,
-  Package,
   Settings,
-  Users,
-  MessagesSquare,
+  Newspaper
 } from 'lucide-react'
 import { type SidebarData } from '../types'
 
@@ -24,25 +22,14 @@ export const sidebarData: SidebarData = {
           icon: LayoutDashboard,
         },
         {
-          title: 'Tasks',
+          title: '任务',
           url: '/tasks',
           icon: ListTodo,
         },
         {
-          title: 'Apps',
-          url: '/apps',
-          icon: Package,
-        },
-        {
-          title: 'Chats',
-          url: '/chats',
-          badge: '3',
-          icon: MessagesSquare,
-        },
-        {
-          title: 'Users',
-          url: '/users',
-          icon: Users,
+          title: '文章',
+          url: '/articles',
+          icon: Newspaper,
         },
       ],
     },
@@ -50,13 +37,13 @@ export const sidebarData: SidebarData = {
       title: 'Other',
       items: [
         {
-          title: 'Settings',
+          title: '设置',
           url: '/settings',
           icon: Settings,
 
         },
         {
-          title: 'Help Center',
+          title: '帮助中心',
           url: '/help-center',
           icon: HelpCircle,
         },

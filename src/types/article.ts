@@ -1,4 +1,3 @@
-
 export interface Article {
   tid: number
   title: string
@@ -8,13 +7,7 @@ export interface Article {
   preview_images: string
 }
 
-
-export type TimeRange =
-  | "7d"
-  | "1w"
-  | "1m"
-  | "1y"
-  | "all"
+export type TimeRange = '7d' | '1w' | '1m' | '1y' | 'all'
 
 export interface ArticleFilter {
   keyword: string
@@ -25,4 +18,5 @@ export interface ArticleFilter {
 export interface Category {
   category: string
   count: number
+  items?: Category[]
 }

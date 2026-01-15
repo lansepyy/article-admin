@@ -1,11 +1,18 @@
 import { Outlet } from '@tanstack/react-router';
-import { Monitor, Bell, Download, Folder, UserPen } from 'lucide-react'
+import {
+  Monitor,
+  Bell,
+  Download,
+  Folder,
+  UserPen,
+  Settings2,
+} from 'lucide-react'
 import { ConfigDrawer } from '@/components/config-drawer';
 import { Header } from '@/components/layout/header';
 import { Main } from '@/components/layout/main';
 import { Search } from '@/components/search';
 import { ThemeSwitch } from '@/components/theme-switch';
-import { SidebarNav } from './components/sidebar-nav';
+import { TopNav } from '@/features/settings/components/top-nav.tsx';
 
 
 const sidebarNavItems = [
@@ -49,14 +56,17 @@ export function Settings() {
       </Header>
 
       <Main fixed>
-        <div className='flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-y-0 lg:space-x-12'>
-          <aside className='top-0 lg:sticky lg:w-1/5'>
-            <SidebarNav items={sidebarNavItems} />
-          </aside>
-          <div className='flex w-full overflow-y-hidden p-1'>
-            <Outlet />
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <Settings2 className="h-8 w-8 text-primary" />
+            <h1 className="text-3xl font-bold">服务器配置</h1>
           </div>
+          <p className="text-muted-foreground">
+            配置和管理您的下载器、媒体服务器等服务连接
+          </p>
         </div>
+        <TopNav items={sidebarNavItems} />
+        <Outlet/>
       </Main>
     </>
   )

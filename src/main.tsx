@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
+
 import { useAuthStore } from '@/stores/auth-store'
 import { handleServerError } from '@/lib/handle-server-error'
 import { DirectionProvider } from './context/direction-provider'
@@ -86,6 +87,7 @@ declare module '@tanstack/react-router' {
     router: typeof router
   }
 }
+
 
 // Render the app
 const rootElement = document.getElementById('root')!

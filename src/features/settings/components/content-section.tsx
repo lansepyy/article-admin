@@ -1,22 +1,41 @@
-import { Separator } from '@/components/ui/separator'
+import type { JSX } from 'react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card.tsx'
 
 type ContentSectionProps = {
   title: string
   desc: string
   children: React.JSX.Element
+  icon: JSX.Element
 }
 
-export function ContentSection({ title, desc, children }: ContentSectionProps) {
+export function ContentSection({
+  title,
+  desc,
+  children,
+  icon,
+}: ContentSectionProps) {
   return (
-    <div className='flex flex-1 flex-col'>
-      <div className='flex-none'>
-        <h3 className='text-lg font-medium'>{title}</h3>
-        <p className='text-sm text-muted-foreground'>{desc}</p>
-      </div>
-      <Separator className='my-4 flex-none' />
-      <div className='faded-bottom h-full w-full overflow-y-auto scroll-smooth pe-4 pb-12'>
-        <div className='-mx-1 px-1.5 lg:max-w-xl'>{children}</div>
-      </div>
-    </div>
+    <Card className='space-y-4 mt-6'>
+      <CardHeader>
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center gap-3'>
+            <div className='rounded-lg bg-primary/10 p-2'>
+              {icon}
+            </div>
+            <div>
+              <CardTitle>{title}</CardTitle>
+              <CardDescription>{desc}</CardDescription>
+            </div>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className='space-y-4'>{children}</CardContent>
+    </Card>
   )
 }

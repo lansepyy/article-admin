@@ -5,9 +5,8 @@ import { UserPen } from 'lucide-react'
 export function SettingsAccount() {
   return (
     <ContentSection
-      title='Account'
-      desc='Update your account settings. Set your preferred language and
-          timezone.'
+      title='账户'
+      desc='编辑你的账号密码信息'
       icon={<UserPen className='h-5 w-5 text-primary' />}
     >
       <AccountForm />

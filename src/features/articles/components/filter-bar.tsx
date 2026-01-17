@@ -1,7 +1,7 @@
-import type { ArticleFilter, Category, TimeRange } from '@/types/article.ts'
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useRef, useEffect } from 'react'
+import type { ArticleFilter, Category } from '@/types/article.ts'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 interface FilterBarProps {
   value: ArticleFilter
@@ -14,62 +14,66 @@ export function FilterBar({
                             value,
                             categories,
                             onChange,
-                            onReset,
                           }: FilterBarProps) {
-  const options: { label: string; value: TimeRange }[] = [
-    { label: "7 天内", value: "7d" },
-    { label: "一周内", value: "1w" },
-    { label: "一个月内", value: "1m" },
-    { label: "一年内", value: "1y" },
-  ]
 
+  const scrollAreaRef = useRef<HTMLDivElement>(null)
+  const tabsListRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!scrollAreaRef.current || !tabsListRef.current) return
+
+    const scrollArea = scrollAreaRef.current
+    const tabsList = tabsListRef.current
+    const activeTab = tabsList.querySelector('[data-state="active"]') as HTMLElement
+
+    if (activeTab) {
+      const scrollContainer = scrollArea.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement
+      if (!scrollContainer) return
+
+      const containerRect = scrollContainer.getBoundingClientRect()
+      const activeRect = activeTab.getBoundingClientRect()
+
+      const scrollLeft =
+        activeTab.offsetLeft -
+        containerRect.width / 2 +
+        activeRect.width / 2
+
+      scrollContainer.scrollTo({
+        left: scrollLeft,
+        behavior: 'smooth',
+      })
+    }
+  }, [value.category])
 
   return (
-    <div className="mb-6 flex flex-wrap gap-3">
-      <Input
-        placeholder="搜索标题关键字"
-        className="w-[220px]"
-        value={value.keyword}
-        onChange={(e) =>
-          onChange({ ...value, keyword: e.target.value })
-        }
-      />
-
-      <Select
-        value={value.category}
-        onValueChange={(v) =>
-          onChange({ ...value, category: v })
-        }
-      >
-        <SelectTrigger className="w-[160px]">
-          <SelectValue placeholder="选择类目" />
-        </SelectTrigger>
-        <SelectContent>
-          {categories.map((c) => (
-            <SelectItem key={c.category} value={c.category}>
-              {c.category}({c.count})
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      <div className="flex flex-wrap items-center gap-2">
-        {options.map((opt) => (
-          <Button
-            key={opt.value}
-            size="sm"
-            variant={value.timeRange === opt.value ? "default" : "outline"}
-            onClick={() => onChange({ ...value, timeRange: opt.value })}
+    <div className='space-y-4 mb-6'>
+      <ScrollArea ref={scrollAreaRef} className='w-full' type='hover' orientation='horizontal'>
+        <Tabs
+          value={value.category || 'all'}
+          onValueChange={(v) =>
+            onChange({ ...value, category: v === 'all' ? '' : v })
+          }
+        >
+          <TabsList
+            ref={tabsListRef}
           >
-            {opt.label}
-          </Button>
-        ))}
-      </div>
+            <TabsTrigger
+              value='all'
+            >
+              全部
+            </TabsTrigger>
 
-      {/* 重置 */}
-      <Button variant="ghost" onClick={onReset}>
-        重置
-      </Button>
+            {categories.map((c) => (
+              <TabsTrigger
+                key={c.category}
+                value={c.category}
+              >
+                {c.category}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </ScrollArea>
     </div>
   )
 }

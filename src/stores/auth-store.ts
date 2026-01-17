@@ -3,14 +3,9 @@ import { getCookie, setCookie, removeCookie } from '@/lib/cookies'
 
 export const ACCESS_TOKEN = 'thisisjustarandomstring'
 
-interface AuthUser {
-  username: string
-}
 
 interface AuthState {
   auth: {
-    user: AuthUser | null
-    setUser: (user: AuthUser | null) => void
     accessToken: string
     setAccessToken: (accessToken: string) => void
     resetAccessToken: () => void
@@ -23,9 +18,7 @@ export const useAuthStore = create<AuthState>()((set) => {
   const initToken = cookieState ? JSON.parse(cookieState) : ''
   return {
     auth: {
-      user: null,
-      setUser: (user) =>
-        set((state) => ({ ...state, auth: { ...state.auth, user } })),
+
       accessToken: initToken,
       setAccessToken: (accessToken) =>
         set((state) => {

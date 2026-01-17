@@ -44,53 +44,56 @@ export function CommonDownloader({ downloaderId }: { downloaderId: string }) {
   }, [data])
 
   const handleSave = async () => {
-    const res = await postConfig('Downloader.' + downloaderId, downloader as never)
+    const res = await postConfig(
+      'Downloader.' + downloaderId,
+      downloader as never
+    )
     toast.success(res.message)
-    await queryClient.invalidateQueries({ queryKey: ['downloader', downloaderId] })
+    await queryClient.invalidateQueries({
+      queryKey: ['downloader', downloaderId],
+    })
     await queryClient.invalidateQueries({ queryKey: ['downloaders'] })
   }
   return (
     <>
-      <div className='space-y-4'>
-        <div className='space-y-2'>
-          <Label>webui地址</Label>
-          <Input
-            type='text'
-            value={downloader?.url}
-            onChange={(e) =>
-              setDownloader((prev) => ({ ...prev, url: e.target.value }))
-            }
-          />
-        </div>
-        <div className='space-y-2'>
-          <Label>用户名</Label>
-          <Input
-            type='text'
-            value={downloader.username}
-            onChange={(e) =>
-              setDownloader((prev) => ({ ...prev, username: e.target.value }))
-            }
-          />
-        </div>
-        <div className='space-y-2'>
-          <Label>密码</Label>
-          <Input
-            type='text'
-            value={downloader.password}
-            onChange={(e) =>
-              setDownloader((prev) => ({ ...prev, password: e.target.value }))
-            }
-          />
-        </div>
-        <div className='space-y-2'>
-          <Label>下载目录</Label>
-          <PathListInput
-            value={downloader.save_paths}
-            onChange={(v) =>
-              setDownloader((prev) => ({ ...prev, save_paths: v }))
-            }
-          />
-        </div>
+      <div className='space-y-2'>
+        <Label>webui地址</Label>
+        <Input
+          type='text'
+          value={downloader?.url}
+          onChange={(e) =>
+            setDownloader((prev) => ({ ...prev, url: e.target.value }))
+          }
+        />
+      </div>
+      <div className='space-y-2'>
+        <Label>用户名</Label>
+        <Input
+          type='text'
+          value={downloader.username}
+          onChange={(e) =>
+            setDownloader((prev) => ({ ...prev, username: e.target.value }))
+          }
+        />
+      </div>
+      <div className='space-y-2'>
+        <Label>密码</Label>
+        <Input
+          type='text'
+          value={downloader.password}
+          onChange={(e) =>
+            setDownloader((prev) => ({ ...prev, password: e.target.value }))
+          }
+        />
+      </div>
+      <div className='space-y-2'>
+        <Label>下载目录</Label>
+        <PathListInput
+          value={downloader.save_paths}
+          onChange={(v) =>
+            setDownloader((prev) => ({ ...prev, save_paths: v }))
+          }
+        />
       </div>
       <div className='flex justify-end'>
         <Button onClick={handleSave}>保存配置</Button>

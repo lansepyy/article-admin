@@ -5,7 +5,6 @@ import { useSearch } from '@/context/search-provider'
 import { useTheme } from '@/context/theme-provider'
 import {
   CommandDialog,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
@@ -18,7 +17,7 @@ import { ScrollArea } from './ui/scroll-area'
 export function CommandMenu() {
   const navigate = useNavigate()
   const { setTheme } = useTheme()
-  const { open, setOpen } = useSearch()
+  const { open, setOpen, keyword, setKeyword } = useSearch()
 
   const runCommand = React.useCallback(
     (command: () => unknown) => {
@@ -30,10 +29,19 @@ export function CommandMenu() {
 
   return (
     <CommandDialog modal open={open} onOpenChange={setOpen}>
-      <CommandInput placeholder='Type a command or search...' />
+      <CommandInput
+        placeholder='输入关键字搜索,按回车关闭'
+        value={keyword}
+        onValueChange={(e) => setKeyword(e)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault()
+            setOpen(false)
+          }
+        }}
+      />
       <CommandList>
         <ScrollArea type='hover' className='h-72 pe-1'>
-          <CommandEmpty>No results found.</CommandEmpty>
           {sidebarData.navGroups.map((group) => (
             <CommandGroup key={group.title} heading={group.title}>
               {group.items.map((navItem, i) => {

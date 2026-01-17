@@ -6,6 +6,14 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    host: true,
+    allowedHosts: [
+      'article.05730116.xyz',
+      'dev.example.com',
+      'localhost'
+    ]
+  },
   plugins: [
     tanstackRouter({
       target: 'react',

@@ -4,14 +4,13 @@ import { Plus, Trash2, ChevronDown } from 'lucide-react'
 import { toast } from 'sonner'
 import { getCategories } from '@/api/article.ts'
 import { getConfig, postConfig } from '@/api/config.ts'
-import { useIsMobile } from '@/hooks/use-mobile.tsx'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card.tsx'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
+import { Label } from '@/components/ui/label.tsx'
 import {
   Select,
   SelectContent,
@@ -36,7 +35,6 @@ interface DownloaderConfig {
 }
 
 export function FolderForm() {
-  const isMobile = useIsMobile()
   const [folders, setFolders] = useState<Folder[]>([])
   const queryClient = useQueryClient()
 
@@ -143,49 +141,51 @@ export function FolderForm() {
   return (
     <div className='space-y-6'>
       <div className='space-y-4'>
-        {folders.map((cfg, index) =>
-          isMobile ? (
-            <Collapsible key={index} className='rounded-lg border'>
-              <div className='flex items-center justify-between px-4 py-3'>
-                <div className='space-y-0.5'>
-                  <div className='text-sm font-medium'>
-                    {cfg.category || '未选择类目'} ·{' '}
-                    {cfg.subCategory || '未选择子类目'} ·{' '}
-                    {cfg.downloader || '未选择下载器'}
+        {folders.map((cfg, index) => (
+          <Collapsible key={index} className='rounded-lg border'>
+            <div className='flex items-center justify-between px-4 py-3'>
+              <div className='space-y-0.5'>
+                <div className='text-sm font-medium'>
+                  {cfg.category || '未选择板块'} ·{' '}
+                  {cfg.subCategory || '未选择类目'} ·{' '}
+                  {cfg.downloader || '未选择下载器'}
+                </div>
+                {cfg.savePath && (
+                  <div className='truncate text-xs text-muted-foreground'>
+                    {cfg.savePath}
                   </div>
-                  {cfg.savePath && (
-                    <div className='truncate text-xs text-muted-foreground'>
-                      {cfg.savePath}
-                    </div>
-                  )}
-                </div>
-
-                <div className='flex items-center gap-1'>
-                  <CollapsibleTrigger asChild>
-                    <Button size='icon' variant='ghost'>
-                      <ChevronDown className='h-4 w-4' />
-                    </Button>
-                  </CollapsibleTrigger>
-                  <Button
-                    size='icon'
-                    variant='ghost'
-                    onClick={() => removeFolder(index)}
-                    disabled={folders.length === 1}
-                  >
-                    <Trash2 className='h-4 w-4' />
-                  </Button>
-                </div>
+                )}
               </div>
 
-              <CollapsibleContent className='space-y-3 border-t px-4 py-4'>
+              <div className='flex items-center gap-1'>
+                <CollapsibleTrigger asChild>
+                  <Button size='icon' variant='ghost'>
+                    <ChevronDown className='h-4 w-4' />
+                  </Button>
+                </CollapsibleTrigger>
+                <Button
+                  size='icon'
+                  variant='ghost'
+                  onClick={() => removeFolder(index)}
+                  disabled={folders.length === 1}
+                >
+                  <Trash2 className='h-4 w-4' />
+                </Button>
+              </div>
+            </div>
+
+            <CollapsibleContent className='space-y-3 border-t px-4 py-4'>
+              <div className='space-y-2'>
+                <Label>板块</Label>
                 <Select
                   value={cfg.category}
                   onValueChange={(v) => handleCategoryChange(index, v)}
                 >
                   <SelectTrigger className='w-full'>
-                    <SelectValue placeholder='选择类目' />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent className='w-full'>
+                    <SelectItem value='ALL'>不限制板块</SelectItem>
                     {categories?.map((c) => (
                       <SelectItem key={c.category} value={c.category}>
                         {c.category}
@@ -193,17 +193,20 @@ export function FolderForm() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
 
+              <div className='space-y-2'>
+                <Label>分类</Label>
                 <Select
                   value={cfg.subCategory}
                   disabled={!cfg.category}
                   onValueChange={(v) => updateFolder(index, 'subCategory', v)}
                 >
                   <SelectTrigger className='w-full'>
-                    <SelectValue placeholder='选择子类目' />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent className='w-full'>
-                    <SelectItem value='ALL'>不限制子类目</SelectItem>
+                    <SelectItem value='ALL'>不限制类目</SelectItem>
                     {getSubCategories(cfg.category).map((sub) => (
                       <SelectItem key={sub.category} value={sub.category}>
                         {sub.category}
@@ -211,7 +214,10 @@ export function FolderForm() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
 
+              <div className='space-y-2'>
+                <Label>下载器</Label>
                 <Select
                   value={cfg.downloader}
                   onValueChange={(v) => {
@@ -220,7 +226,7 @@ export function FolderForm() {
                   }}
                 >
                   <SelectTrigger className='w-full'>
-                    <SelectValue placeholder='选择下载器' />
+                    <SelectValue/>
                   </SelectTrigger>
                   <SelectContent className='w-full'>
                     {downloaders.map((d) => (
@@ -230,14 +236,18 @@ export function FolderForm() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
 
+
+              <div className='space-y-2'>
+                <Label>下载目录</Label>
                 <Select
                   value={cfg.savePath}
                   disabled={!cfg.downloader}
                   onValueChange={(v) => updateFolder(index, 'savePath', v)}
                 >
                   <SelectTrigger className='w-full'>
-                    <SelectValue placeholder='选择下载目录' />
+                    <SelectValue/>
                   </SelectTrigger>
                   <SelectContent className='w-full'>
                     {getSavePaths(cfg.downloader).map((p) => (
@@ -247,96 +257,10 @@ export function FolderForm() {
                     ))}
                   </SelectContent>
                 </Select>
-              </CollapsibleContent>
-            </Collapsible>
-          ) : (
-            <Card key={index}>
-              <CardContent className='pt-2'>
-                <div className='grid flex-1 grid-cols-5 gap-4'>
-                  <Select
-                    value={cfg.category}
-                    onValueChange={(v) => handleCategoryChange(index, v)}
-                  >
-                    <SelectTrigger className='w-full'>
-                      <SelectValue placeholder='选择类目' />
-                    </SelectTrigger>
-                    <SelectContent className='w-full'>
-                      {categories?.map((c) => (
-                        <SelectItem key={c.category} value={c.category}>
-                          {c.category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Select
-                    value={cfg.subCategory}
-                    disabled={!cfg.category}
-                    onValueChange={(v) => updateFolder(index, 'subCategory', v)}
-                  >
-                    <SelectTrigger className='w-full'>
-                      <SelectValue placeholder='选择子类目' />
-                    </SelectTrigger>
-                    <SelectContent className='w-full'>
-                      <SelectItem value='ALL'>不限制子类目</SelectItem>
-                      {getSubCategories(cfg.category).map((sub) => (
-                        <SelectItem key={sub.category} value={sub.category}>
-                          {sub.category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Select
-                    value={cfg.downloader}
-                    onValueChange={(v) => {
-                      updateFolder(index, 'downloader', v)
-                      updateFolder(index, 'savePath', '')
-                    }}
-                  >
-                    <SelectTrigger className='w-full'>
-                      <SelectValue placeholder='选择下载器' />
-                    </SelectTrigger>
-                    <SelectContent className='w-full'>
-                      {downloaders.map((d) => (
-                        <SelectItem key={d.id} value={d.id}>
-                          {d.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Select
-                    value={cfg.savePath}
-                    disabled={!cfg.downloader}
-                    onValueChange={(v) => updateFolder(index, 'savePath', v)}
-                  >
-                    <SelectTrigger className='w-full'>
-                      <SelectValue placeholder='选择下载目录' />
-                    </SelectTrigger>
-                    <SelectContent className='w-full'>
-                      {getSavePaths(cfg.downloader).map((p) => (
-                        <SelectItem key={p.path} value={p.path}>
-                          {p.label}（{p.path}）
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Button
-                    size='icon'
-                    variant='ghost'
-                    onClick={() => removeFolder(index)}
-                    disabled={folders.length === 1}
-                  >
-                    <Trash2 className='h-4 w-4' />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )
-        )}
-
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+        ))}
         <Button
           variant='outline'
           onClick={addFolder}

@@ -1,48 +1,47 @@
 import { useState } from 'react'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { DOWNLOADER_META } from '@/features/settings/data/downloader-list.ts'
-import { CommonDownloader } from '@/features/settings/downloader/common-downloader.tsx'
-import { Thunder } from '@/features/settings/downloader/thunder.tsx'
-import { Label } from '@/components/ui/label.tsx'
+import { Card, CardContent } from '@/components/ui/card.tsx'
+import { ScrollArea } from '@/components/ui/scroll-area.tsx'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { DOWNLOADER_META } from '@/features/settings/data/downloader-list'
+import { CommonDownloader } from '@/features/settings/downloader/common-downloader'
+import { Thunder } from '@/features/settings/downloader/thunder'
 
 export function DownloaderForm() {
   const [downloaderId, setDownloaderId] = useState<string>('qbittorrent')
 
   return (
-    <div className='w-full space-y-6'>
-      <Label>选择下载器</Label>
-      <Select
-        value={downloaderId}
-        onValueChange={(value) => {
-          setDownloaderId(value)
-        }}
+    <Tabs
+      value={downloaderId}
+      onValueChange={setDownloaderId}
+      className='w-full'
+    >
+      <ScrollArea
+        orientation='horizontal'
+        type='hover'
+        className='w-full'
       >
-        <SelectTrigger className='w-full'>
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent className='w-full'>
+        <TabsList>
           {DOWNLOADER_META.map((d) => (
-            <SelectItem key={d.id} value={d.id}>
+            <TabsTrigger key={d.id} value={d.id}>
               {d.name}
-            </SelectItem>
+            </TabsTrigger>
           ))}
-        </SelectContent>
-      </Select>
+        </TabsList>
+      </ScrollArea>
 
-      {downloaderId === 'thunder' ? (
-        <Thunder downloaderId={downloaderId}></Thunder>
-      ) : (
-        <CommonDownloader
-          downloaderId={downloaderId}
-          key={downloaderId}
-        ></CommonDownloader>
-      )}
-    </div>
+      {DOWNLOADER_META.map((d) => (
+        <TabsContent key={d.id} value={d.id}>
+          <Card>
+            <CardContent className='space-y-6'>
+              {d.id === 'thunder' ? (
+                <Thunder downloaderId={d.id} />
+              ) : (
+                <CommonDownloader key={d.id} downloaderId={d.id} />
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      ))}
+    </Tabs>
   )
 }

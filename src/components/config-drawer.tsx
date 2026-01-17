@@ -1,31 +1,26 @@
-import { type SVGProps } from 'react'
+import { type SVGProps } from 'react';
 import { Root as Radio, Item } from '@radix-ui/react-radio-group'
-import { CircleCheck, RotateCcw, Settings } from 'lucide-react'
-import { IconDir } from '@/assets/custom/icon-dir'
-import { IconLayoutCompact } from '@/assets/custom/icon-layout-compact'
-import { IconLayoutDefault } from '@/assets/custom/icon-layout-default'
-import { IconLayoutFull } from '@/assets/custom/icon-layout-full'
-import { IconSidebarFloating } from '@/assets/custom/icon-sidebar-floating'
-import { IconSidebarInset } from '@/assets/custom/icon-sidebar-inset'
-import { IconSidebarSidebar } from '@/assets/custom/icon-sidebar-sidebar'
-import { IconThemeDark } from '@/assets/custom/icon-theme-dark'
-import { IconThemeLight } from '@/assets/custom/icon-theme-light'
-import { IconThemeSystem } from '@/assets/custom/icon-theme-system'
-import { cn } from '@/lib/utils'
-import { useDirection } from '@/context/direction-provider'
-import { type Collapsible, useLayout } from '@/context/layout-provider'
-import { useTheme } from '@/context/theme-provider'
-import { Button } from '@/components/ui/button'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet'
-import { useSidebar } from './ui/sidebar'
+import { CircleCheck, Monitor, RotateCcw } from 'lucide-react'
+import { IconDir } from '@/assets/custom/icon-dir';
+import { IconLayoutCompact } from '@/assets/custom/icon-layout-compact';
+import { IconLayoutDefault } from '@/assets/custom/icon-layout-default';
+import { IconLayoutFull } from '@/assets/custom/icon-layout-full';
+import { IconSidebarFloating } from '@/assets/custom/icon-sidebar-floating';
+import { IconSidebarInset } from '@/assets/custom/icon-sidebar-inset';
+import { IconSidebarSidebar } from '@/assets/custom/icon-sidebar-sidebar';
+import { IconThemeDark } from '@/assets/custom/icon-theme-dark';
+import { IconThemeLight } from '@/assets/custom/icon-theme-light';
+import { IconThemeSystem } from '@/assets/custom/icon-theme-system';
+import { cn } from '@/lib/utils';
+import { useDirection } from '@/context/direction-provider';
+import { type Collapsible, useLayout } from '@/context/layout-provider';
+import { useTheme } from '@/context/theme-provider';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { useSidebar } from './ui/sidebar';
+
+
+
 
 export function ConfigDrawer() {
   const { setOpen } = useSidebar()
@@ -50,14 +45,14 @@ export function ConfigDrawer() {
           aria-describedby='config-drawer-description'
           className='rounded-full'
         >
-          <Settings aria-hidden='true' />
+          <Monitor aria-hidden='true' />
         </Button>
       </SheetTrigger>
       <SheetContent className='flex flex-col'>
         <SheetHeader className='pb-0 text-start'>
-          <SheetTitle>Theme Settings</SheetTitle>
+          <SheetTitle>主题设置</SheetTitle>
           <SheetDescription id='config-drawer-description'>
-            Adjust the appearance and layout to suit your preferences.
+            根据喜好来调整布局、主题
           </SheetDescription>
         </SheetHeader>
         <div className='space-y-6 overflow-y-auto px-4'>
@@ -72,7 +67,7 @@ export function ConfigDrawer() {
             onClick={handleReset}
             aria-label='Reset all settings to default values'
           >
-            Reset
+            重置
           </Button>
         </SheetFooter>
       </SheetContent>
@@ -187,17 +182,17 @@ function ThemeConfig() {
         {[
           {
             value: 'system',
-            label: 'System',
+            label: '系统',
             icon: IconThemeSystem,
           },
           {
             value: 'light',
-            label: 'Light',
+            label: '明亮',
             icon: IconThemeLight,
           },
           {
             value: 'dark',
-            label: 'Dark',
+            label: '暗黑',
             icon: IconThemeDark,
           },
         ].map((item) => (
@@ -205,7 +200,7 @@ function ThemeConfig() {
         ))}
       </Radio>
       <div id='theme-description' className='sr-only'>
-        Choose between system preference, light mode, or dark mode
+        选择根据系统、明亮、暗黑主题
       </div>
     </div>
   )
@@ -230,17 +225,17 @@ function SidebarConfig() {
         {[
           {
             value: 'inset',
-            label: 'Inset',
+            label: '嵌入式',
             icon: IconSidebarInset,
           },
           {
             value: 'floating',
-            label: 'Floating',
+            label: '浮动式',
             icon: IconSidebarFloating,
           },
           {
             value: 'sidebar',
-            label: 'Sidebar',
+            label: '标准侧边栏',
             icon: IconSidebarSidebar,
           },
         ].map((item) => (
@@ -248,7 +243,7 @@ function SidebarConfig() {
         ))}
       </Radio>
       <div id='sidebar-description' className='sr-only'>
-        Choose between inset, floating, or standard sidebar layout
+        在嵌入式、浮动式或标准侧边栏布局之间进行选择
       </div>
     </div>
   )
@@ -287,17 +282,17 @@ function LayoutConfig() {
         {[
           {
             value: 'default',
-            label: 'Default',
+            label: '默认展开',
             icon: IconLayoutDefault,
           },
           {
             value: 'icon',
-            label: 'Compact',
+            label: '紧凑纯图标',
             icon: IconLayoutCompact,
           },
           {
             value: 'offcanvas',
-            label: 'Full layout',
+            label: '完整布局',
             icon: IconLayoutFull,
           },
         ].map((item) => (
@@ -305,7 +300,7 @@ function LayoutConfig() {
         ))}
       </Radio>
       <div id='layout-description' className='sr-only'>
-        Choose between default expanded, compact icon-only, or full layout mode
+        在默认展开模式、紧凑纯图标模式或完整布局模式之间进行选择
       </div>
     </div>
   )
@@ -330,14 +325,14 @@ function DirConfig() {
         {[
           {
             value: 'ltr',
-            label: 'Left to Right',
+            label: '从左到右',
             icon: (props: SVGProps<SVGSVGElement>) => (
               <IconDir dir='ltr' {...props} />
             ),
           },
           {
             value: 'rtl',
-            label: 'Right to Left',
+            label: '从右到左',
             icon: (props: SVGProps<SVGSVGElement>) => (
               <IconDir dir='rtl' {...props} />
             ),
@@ -347,7 +342,7 @@ function DirConfig() {
         ))}
       </Radio>
       <div id='direction-description' className='sr-only'>
-        Choose between left-to-right or right-to-left site direction
+        选择从左到右或从右到左的布局方向
       </div>
     </div>
   )

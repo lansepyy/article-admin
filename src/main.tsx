@@ -18,6 +18,7 @@ import { ThemeProvider } from './context/theme-provider'
 import { routeTree } from './routeTree.gen'
 // Styles
 import './styles/index.css'
+import { ImageModeProvider } from '@/context/image-mode-provider.tsx'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -98,9 +99,11 @@ if (!rootElement.innerHTML) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <FontProvider>
-            <DirectionProvider>
-              <RouterProvider router={router} />
-            </DirectionProvider>
+            <ImageModeProvider>
+              <DirectionProvider>
+                <RouterProvider router={router} />
+              </DirectionProvider>
+            </ImageModeProvider>
           </FontProvider>
         </ThemeProvider>
       </QueryClientProvider>

@@ -1,220 +1,140 @@
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@tanstack/react-router'
-import { showSubmittedData } from '@/lib/show-submitted-data'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Switch } from '@/components/ui/switch'
+import { Separator } from '@radix-ui/react-separator';
+import { Card, CardContent} from '@/components/ui/card.tsx';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx';
+import { Input } from '@/components/ui/input.tsx'
+import { Textarea } from '@/components/ui/textarea.tsx'
+import { Button } from '@/components/ui/button.tsx'
+import { Label } from '@/components/ui/label.tsx'
+import { Switch } from '@/components/ui/switch.tsx'
 
-const notificationsFormSchema = z.object({
-  type: z.enum(['all', 'mentions', 'none'], {
-    error: (iss) =>
-      iss.input === undefined
-        ? 'Please select a notification type.'
-        : undefined,
-  }),
-  mobile: z.boolean().default(false).optional(),
-  communication_emails: z.boolean().default(false).optional(),
-  social_emails: z.boolean().default(false).optional(),
-  marketing_emails: z.boolean().default(false).optional(),
-  security_emails: z.boolean(),
-})
 
-type NotificationsFormValues = z.infer<typeof notificationsFormSchema>
 
-// This can come from your database or API.
-const defaultValues: Partial<NotificationsFormValues> = {
-  communication_emails: false,
-  marketing_emails: false,
-  social_emails: true,
-  security_emails: true,
+function SettingSwitch({ label }: { label: string }) {
+  return (
+    <div className="flex items-center justify-between">
+      <Label>{label}</Label>
+      <Switch />
+    </div>
+  )
+}
+
+function FormItem({
+                    label,
+                    children,
+                  }: {
+  label: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className="space-y-2">
+      <Label>{label}</Label>
+      {children}
+    </div>
+  )
 }
 
 export function NotificationsForm() {
-  const form = useForm<NotificationsFormValues>({
-    resolver: zodResolver(notificationsFormSchema),
-    defaultValues,
-  })
-
+  const wxTemplate=`📁 板块：{{section}} / {{type}}\n
+📦 体积：{{size}}\n
+🗓 发布：{{publish_date}}\n
+⬇️ 下载器：{{downloader}}\n
+📂 保存目录：{{save_path}}\n
+🔗 Magnet：\n
+{{magnet}}`
+  const tgTemplate=`🚀 {{title}}\n\n
+📁 板块：{{section}} / {{type}}\n
+📦 体积：{{size}}\n
+🗓 发布：{{publish_date}}\n
+⬇️ 下载器：{{downloader}}\n
+📂 保存目录：{{save_path}}\n
+🔗 Magnet：\n
+{{magnet}}`
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit((data) => showSubmittedData(data))}
-        className='space-y-8'
-      >
-        <FormField
-          control={form.control}
-          name='type'
-          render={({ field }) => (
-            <FormItem className='relative space-y-3'>
-              <FormLabel>Notify me about...</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className='flex flex-col gap-2'
-                >
-                  <FormItem className='flex items-center'>
-                    <FormControl>
-                      <RadioGroupItem value='all' />
-                    </FormControl>
-                    <FormLabel className='font-normal'>
-                      All new messages
-                    </FormLabel>
-                  </FormItem>
-                  <FormItem className='flex items-center'>
-                    <FormControl>
-                      <RadioGroupItem value='mentions' />
-                    </FormControl>
-                    <FormLabel className='font-normal'>
-                      Direct messages and mentions
-                    </FormLabel>
-                  </FormItem>
-                  <FormItem className='flex items-center'>
-                    <FormControl>
-                      <RadioGroupItem value='none' />
-                    </FormControl>
-                    <FormLabel className='font-normal'>Nothing</FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
+    <Tabs defaultValue='wechat' className='w-full'>
+      <TabsList>
+        <TabsTrigger value='wechat'>企业微信</TabsTrigger>
+        <TabsTrigger value='telegram'>Telegram</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value='wechat'>
+        <Card>
+          <CardContent className='space-y-6'>
+            <SettingSwitch label='启用企业微信通知' />
+            <SettingSwitch label='推送图片' />
+            <Separator />
+            <FormItem label='企业 ID'>
+              <Input placeholder='WECHAT_CORP_ID' />
             </FormItem>
-          )}
-        />
-        <div className='relative'>
-          <h3 className='mb-4 text-lg font-medium'>Email Notifications</h3>
-          <div className='space-y-4'>
-            <FormField
-              control={form.control}
-              name='communication_emails'
-              render={({ field }) => (
-                <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                  <div className='space-y-0.5'>
-                    <FormLabel className='text-base'>
-                      Communication emails
-                    </FormLabel>
-                    <FormDescription>
-                      Receive emails about your account activity.
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='marketing_emails'
-              render={({ field }) => (
-                <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                  <div className='space-y-0.5'>
-                    <FormLabel className='text-base'>
-                      Marketing emails
-                    </FormLabel>
-                    <FormDescription>
-                      Receive emails about new products, features, and more.
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='social_emails'
-              render={({ field }) => (
-                <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                  <div className='space-y-0.5'>
-                    <FormLabel className='text-base'>Social emails</FormLabel>
-                    <FormDescription>
-                      Receive emails for friend requests, follows, and more.
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='security_emails'
-              render={({ field }) => (
-                <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                  <div className='space-y-0.5'>
-                    <FormLabel className='text-base'>Security emails</FormLabel>
-                    <FormDescription>
-                      Receive emails about your account activity and security.
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                      disabled
-                      aria-readonly
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-        <FormField
-          control={form.control}
-          name='mobile'
-          render={({ field }) => (
-            <FormItem className='relative flex flex-row items-start'>
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <div className='space-y-1 leading-none'>
-                <FormLabel>
-                  Use different settings for my mobile devices
-                </FormLabel>
-                <FormDescription>
-                  You can manage your mobile notifications in the{' '}
-                  <Link
-                    to='/settings'
-                    className='underline decoration-dashed underline-offset-4 hover:decoration-solid'
-                  >
-                    mobile settings
-                  </Link>{' '}
-                  page.
-                </FormDescription>
-              </div>
+
+            <FormItem label='企业密钥'>
+              <Input placeholder='WECHAT_CORP_SECRET' />
             </FormItem>
-          )}
-        />
-        <Button type='submit'>Update notifications</Button>
-      </form>
-    </Form>
+
+            <FormItem label='应用 ID'>
+              <Input placeholder='WECHAT_AGENT_ID' />
+            </FormItem>
+
+            <FormItem label='Token'>
+              <Input placeholder='WECHAT_TOKEN' />
+            </FormItem>
+
+            <FormItem label='EncodingAESKey'>
+              <Input placeholder='WECHAT_ENCODING_AES_KEY' />
+            </FormItem>
+
+            <FormItem label='推送用户'>
+              <Input placeholder='@all' />
+            </FormItem>
+
+            <FormItem label='推送代理'>
+              <Input placeholder='http://127.0.0.1:1234' />
+            </FormItem>
+
+            <Separator />
+
+            <FormItem label='消息模板'>
+              <Textarea
+                rows={5}
+                placeholder={wxTemplate}
+              />
+            </FormItem>
+
+            <Button>保存配置</Button>
+          </CardContent>
+        </Card>
+      </TabsContent>
+
+      {/* ================= Telegram ================= */}
+      <TabsContent value='telegram'>
+        <Card>
+          <CardContent className='space-y-6'>
+            <SettingSwitch label='启用 Telegram 通知' />
+            <SettingSwitch label='推送图片' />
+            <SettingSwitch label='启用剧透（Spoiler）' />
+
+            <Separator />
+
+            <FormItem label='Bot Token'>
+              <Input placeholder='TELEGRAM_BOT_TOKEN' />
+            </FormItem>
+
+            <FormItem label='Chat ID'>
+              <Input placeholder='TELEGRAM_CHAT_ID' />
+            </FormItem>
+
+            <Separator />
+
+            <FormItem label='消息模板'>
+              <Textarea
+                rows={5}
+                placeholder={tgTemplate}
+              />
+            </FormItem>
+
+            <Button>保存配置</Button>
+          </CardContent>
+        </Card>
+      </TabsContent>
+    </Tabs>
   )
 }

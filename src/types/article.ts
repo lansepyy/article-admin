@@ -5,6 +5,9 @@ export interface Article {
   publish_date: string
   magnet: string
   preview_images: string
+  sub_type: string
+  size: number
+  in_stock: boolean
 }
 
 export type TimeRange = '7d' | '1w' | '1m' | '1y' | 'all'

@@ -1,12 +1,13 @@
-import { getPageNumbers } from '@/lib/utils.ts'
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { getPageNumbers } from '@/lib/utils.ts';
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from '@/components/ui/pagination'
+
+
 
 interface Props {
   page: number
@@ -21,10 +22,11 @@ export function ArticlePagination({ page, total, pageSize, onChange }: Props) {
   if (totalPages <= 1) return null
 
   return (
-    <Pagination className='mt-8'>
-      <PaginationContent>
+    <Pagination className="justify-end">
+      <PaginationContent className="gap-2">
         <PaginationItem>
           <PaginationLink
+            className="cursor-pointer h-8 min-w-8 px-1"
             onClick={() => onChange(1)}
             aria-disabled={page === 1}
           >
@@ -33,7 +35,9 @@ export function ArticlePagination({ page, total, pageSize, onChange }: Props) {
         </PaginationItem>
 
         <PaginationItem>
-          <PaginationPrevious onClick={() => onChange(Math.max(1, page - 1))} />
+          <PaginationLink className="cursor-pointer h-8 min-w-8 px-1" onClick={() => onChange(Math.max(1, page - 1))} >
+            <ChevronLeftIcon />
+          </PaginationLink>
         </PaginationItem>
         {pages.map((p, i) => (
           <PaginationItem key={i}>
@@ -41,6 +45,7 @@ export function ArticlePagination({ page, total, pageSize, onChange }: Props) {
               <span className='px-3 text-muted-foreground'>…</span>
             ) : (
               <PaginationLink
+                className="cursor-pointer h-8 min-w-8 px-1"
                 isActive={p === page}
                 onClick={() => onChange(p as number)}
               >
@@ -50,12 +55,16 @@ export function ArticlePagination({ page, total, pageSize, onChange }: Props) {
           </PaginationItem>
         ))}
         <PaginationItem>
-          <PaginationNext
+          <PaginationLink
+            className="cursor-pointer h-8 min-w-8 px-1"
             onClick={() => onChange(Math.min(totalPages, page + 1))}
-          />
+          >
+            <ChevronRightIcon />
+          </PaginationLink>
         </PaginationItem>
         <PaginationItem>
           <PaginationLink
+            className="cursor-pointer h-8 min-w-8 px-1"
             onClick={() => onChange(totalPages)}
             aria-disabled={page === totalPages}
           >

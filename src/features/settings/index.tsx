@@ -13,6 +13,7 @@ import { Main } from '@/components/layout/main';
 import { Search } from '@/components/search';
 import { ThemeSwitch } from '@/components/theme-switch';
 import { TopNav } from '@/features/settings/components/top-nav.tsx';
+import { ImageModeSwitch } from '@/components/image-mode-switch.tsx'
 
 
 const sidebarNavItems = [
@@ -47,15 +48,16 @@ export function Settings() {
   return (
     <>
       {/* ===== Top Heading ===== */}
-      <Header>
+      <Header fixed>
         <Search />
         <div className='ms-auto flex items-center space-x-4'>
+          <ImageModeSwitch/>
           <ThemeSwitch />
           <ConfigDrawer />
         </div>
       </Header>
 
-      <Main fixed>
+      <Main className='flex h-[calc(100vh-4rem)] flex-col'>
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <Settings2 className="h-8 w-8 text-primary" />
@@ -66,7 +68,9 @@ export function Settings() {
           </p>
         </div>
         <TopNav items={sidebarNavItems} />
-        <Outlet/>
+        <div className="flex-1 overflow-y-auto">
+          <Outlet/>
+        </div>
       </Main>
     </>
   )

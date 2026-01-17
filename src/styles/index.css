@@ -86,11 +86,19 @@
   }
 }
 
-.scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+/* ===== 显示（默认） ===== */
+[data-image-mode='show'] img {
+    filter: none;
+    opacity: 1;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
+/* ===== 模糊 ===== */
+[data-image-mode='blur'] img {
+    filter: blur(16px);
+    transition: filter 0.2s ease;
+}
+
+/* ===== 隐藏 ===== */
+[data-image-mode='hide'] img {
+    display: none !important;
 }

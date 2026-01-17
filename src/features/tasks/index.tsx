@@ -8,6 +8,7 @@ import { TasksPrimaryButtons } from './components/tasks-primary-buttons'
 import { TasksProvider } from './components/tasks-provider'
 import { TasksTable } from './components/tasks-table'
 import { tasks } from './data/tasks'
+import { ImageModeSwitch } from '@/components/image-mode-switch.tsx'
 
 export function Tasks() {
   return (
@@ -15,6 +16,7 @@ export function Tasks() {
       <Header fixed>
         <Search />
         <div className='ms-auto flex items-center space-x-4'>
+          <ImageModeSwitch/>
           <ThemeSwitch />
           <ConfigDrawer />
         </div>

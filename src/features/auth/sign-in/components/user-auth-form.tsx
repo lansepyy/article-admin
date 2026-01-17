@@ -57,7 +57,6 @@ export function UserAuthForm({
         // Mock successful authentication with expiry computed at success time
         const res = await login(data)
         if(res.code === 0){
-          auth.setUser({ username: data.username })
           auth.setAccessToken(res.data.access_token)
           const targetPath = redirectTo || '/'
           await navigate({ to: targetPath, replace: true })

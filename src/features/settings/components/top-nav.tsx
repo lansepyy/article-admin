@@ -20,7 +20,7 @@ export function TopNav({ items }: TopNavProps) {
   }
 
   return (
-      <ScrollArea orientation='horizontal' type='hover' className='w-full scrollbar-hide'>
+      <ScrollArea orientation='horizontal' type='hover' className='w-full'>
           <Tabs value={pathname} onValueChange={handleValueChange} className="space-y-6">
             <TabsList className="w-full">
               {items.map((item) => (

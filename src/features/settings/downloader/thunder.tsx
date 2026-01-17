@@ -54,36 +54,34 @@ export function Thunder({ downloaderId }: { downloaderId: string }) {
   }
   return (
     <>
-      <div className='space-y-4'>
-        <div className='space-y-2'>
-          <Label>webui地址</Label>
-          <Input
-            type='text'
-            value={downloader?.url}
-            onChange={(e) =>
-              setDownloader((prev) => ({ ...prev, url: e.target.value }))
-            }
-          />
-        </div>
-        <div className='space-y-2'>
-          <Label>请求头</Label>
-          <Input
-            type='text'
-            value={downloader.authorization}
-            onChange={(e) =>
-              setDownloader((prev) => ({ ...prev, password: e.target.value }))
-            }
-          />
-        </div>
-        <div className='space-y-2'>
-          <Label>下载目录ID</Label>
-          <PathListInput
-            value={downloader.save_paths}
-            onChange={(v) =>
-              setDownloader((prev) => ({ ...prev, save_paths: v }))
-            }
-          />
-        </div>
+      <div className='space-y-2'>
+        <Label>webui地址</Label>
+        <Input
+          type='text'
+          value={downloader?.url}
+          onChange={(e) =>
+            setDownloader((prev) => ({ ...prev, url: e.target.value }))
+          }
+        />
+      </div>
+      <div className='space-y-2'>
+        <Label>请求头</Label>
+        <Input
+          type='text'
+          value={downloader.authorization}
+          onChange={(e) =>
+            setDownloader((prev) => ({ ...prev, password: e.target.value }))
+          }
+        />
+      </div>
+      <div className='space-y-2'>
+        <Label>下载目录ID</Label>
+        <PathListInput
+          value={downloader.save_paths}
+          onChange={(v) =>
+            setDownloader((prev) => ({ ...prev, save_paths: v }))
+          }
+        />
       </div>
       <div className='flex justify-end'>
         <Button onClick={handleSave}>保存配置</Button>

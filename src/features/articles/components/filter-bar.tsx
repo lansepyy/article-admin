@@ -7,7 +7,6 @@ interface FilterBarProps {
   value: ArticleFilter
   categories: Category[]
   onChange: (v: ArticleFilter) => void
-  onReset: () => void
 }
 
 export function FilterBar({

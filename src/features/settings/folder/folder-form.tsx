@@ -28,7 +28,7 @@ interface Folder {
   savePath: string
 }
 
-interface DownloaderConfig {
+export interface DownloaderConfig {
   id: string
   name: string
   save_paths: PathItem[]

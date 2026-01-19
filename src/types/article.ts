@@ -8,14 +8,12 @@ export interface Article {
   sub_type: string
   size: number
   in_stock: boolean
+  detail_url: string
 }
-
-export type TimeRange = '7d' | '1w' | '1m' | '1y' | 'all'
 
 export interface ArticleFilter {
   keyword: string
   category: string
-  timeRange?: TimeRange
 }
 
 export interface Category {

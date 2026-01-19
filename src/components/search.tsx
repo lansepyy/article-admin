@@ -13,7 +13,7 @@ export function Search({
   className = '',
   placeholder = 'Search',
 }: SearchProps) {
-  const { setOpen,setKeyword  } = useSearch()
+  const { setOpen  } = useSearch()
   return (
     <Button
       variant='outline'
@@ -23,7 +23,6 @@ export function Search({
       )}
       onClick={() => {
         setOpen(true)
-        setKeyword("")
       }}
     >
       <SearchIcon

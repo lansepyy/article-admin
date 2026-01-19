@@ -22,7 +22,7 @@ export function ArticlePagination({ page, total, pageSize, onChange }: Props) {
   if (totalPages <= 1) return null
 
   return (
-    <Pagination className="justify-end">
+    <Pagination className="justify-start">
       <PaginationContent className="gap-2">
         <PaginationItem>
           <PaginationLink

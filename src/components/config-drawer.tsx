@@ -6,7 +6,6 @@ import { IconLayoutCompact } from '@/assets/custom/icon-layout-compact';
 import { IconLayoutDefault } from '@/assets/custom/icon-layout-default';
 import { IconLayoutFull } from '@/assets/custom/icon-layout-full';
 import { IconSidebarFloating } from '@/assets/custom/icon-sidebar-floating';
-import { IconSidebarInset } from '@/assets/custom/icon-sidebar-inset';
 import { IconSidebarSidebar } from '@/assets/custom/icon-sidebar-sidebar';
 import { IconThemeDark } from '@/assets/custom/icon-theme-dark';
 import { IconThemeLight } from '@/assets/custom/icon-theme-light';
@@ -168,7 +167,7 @@ function ThemeConfig() {
   return (
     <div>
       <SectionTitle
-        title='Theme'
+        title='主题'
         showReset={theme !== defaultTheme}
         onReset={() => setTheme(defaultTheme)}
       />
@@ -211,7 +210,7 @@ function SidebarConfig() {
   return (
     <div className='max-md:hidden'>
       <SectionTitle
-        title='Sidebar'
+        title='侧边栏'
         showReset={defaultVariant !== variant}
         onReset={() => setVariant(defaultVariant)}
       />
@@ -223,11 +222,6 @@ function SidebarConfig() {
         aria-describedby='sidebar-description'
       >
         {[
-          {
-            value: 'inset',
-            label: '嵌入式',
-            icon: IconSidebarInset,
-          },
           {
             value: 'floating',
             label: '浮动式',
@@ -258,7 +252,7 @@ function LayoutConfig() {
   return (
     <div className='max-md:hidden'>
       <SectionTitle
-        title='Layout'
+        title='布局'
         showReset={radioState !== 'default'}
         onReset={() => {
           setOpen(true)
@@ -311,7 +305,7 @@ function DirConfig() {
   return (
     <div>
       <SectionTitle
-        title='Direction'
+        title='排列'
         showReset={defaultDir !== dir}
         onReset={() => setDir(defaultDir)}
       />

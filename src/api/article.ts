@@ -1,5 +1,4 @@
 import type { Article, ArticleFilter, Category } from '@/types/article.ts'
-import { getDateRange } from '@/lib/utils.ts'
 import { request } from './request'
 
 export interface ArticleListResult {
@@ -20,9 +19,7 @@ export function getArticles(params: {
       per_page: params.pageSize,
       keyword: params.filter.keyword,
       section: params.filter.category,
-      publish_date_range: params.filter.timeRange
-        ? getDateRange(params.filter.timeRange)
-        : {},
+      publish_date_range: {},
     },
   })
 }
@@ -33,4 +30,15 @@ export function getCategories() {
 
 export function downloadArticle(tid: number) {
   return request({ url: '/articles/download', params: { tid } })
+}
+
+export function manulDownloadArticle(
+  tid: number,
+  downloader: string,
+  savePath: string
+) {
+  return request({
+    url: '/articles/download/manul',
+    params: { tid, downloader, save_path: savePath },
+  })
 }

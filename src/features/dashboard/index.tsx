@@ -10,6 +10,7 @@ import { ThemeSwitch } from '@/components/theme-switch'
 import { CategoryCards } from '@/features/dashboard/components/category-cards.tsx'
 import { SummaryCards } from '@/features/dashboard/components/summary-cards.tsx'
 import { ImageModeSwitch } from '@/components/image-mode-switch.tsx'
+import { RealmHint } from '@/features/dashboard/components/realm-hint.tsx'
 
 export function Dashboard() {
   const { data } = useQuery({
@@ -35,6 +36,7 @@ export function Dashboard() {
       {/* ===== Main ===== */}
       <Main>
         <div className='space-y-6 p-6'>
+          <RealmHint total={data?.reduce((sum, c) => sum + c.count, 0)}></RealmHint>
           <SummaryCards data={data ?? []} />
           <CategoryCards data={data ?? []} />
         </div>

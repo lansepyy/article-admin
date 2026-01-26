@@ -21,53 +21,53 @@ export const sidebarData: SidebarData = {
       title: '通用',
       items: [
         {
-          title: '看板',
+          title: '内省',
           url: '/',
           icon: LayoutDashboard,
         },
         {
-          title: '任务',
+          title: '闭关',
           icon: ListTodo,
           items: [
             {
               url: '/tasks',
-              title: '任务管理',
+              title: '闭关管理',
               icon: BookCheck,
             },
             {
               url: '/tasks/log',
-              title: '执行记录',
+              title: '闭关记录',
               icon: AlarmClockCheck,
             },
           ],
         },
         {
-          title: '下载记录',
+          title: '杀敌历程',
           url: '/download-log',
           icon: ClipboardClock,
         },
         {
-          title: '文章',
+          title: '修真界',
           url: '/articles',
           icon: Newspaper,
         },
       ],
     },
     {
-      title: 'Other',
+      title: '其他',
       items: [
         {
-          title: '设置',
+          title: '装备检查',
           url: '/settings',
           icon: Settings,
         },
         {
-          title: '令牌',
+          title: '门派令牌',
           url: '/tokens',
           icon: KeyRound,
         },
         {
-          title: '帮助中心',
+          title: '问天',
           url: '/help-center',
           icon: HelpCircle,
         },

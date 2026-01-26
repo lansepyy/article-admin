@@ -28,6 +28,7 @@ import {
   TableRow,
 } from '@/components/ui/table.tsx'
 import { CommonPagination } from '@/components/pagination.tsx'
+import { ImagePreview } from '@/components/image-preview.tsx'
 
 type formValues = {
   downloader: string
@@ -203,14 +204,15 @@ export function DownloadLogTable() {
                   </TableCell>
                   <TableCell>{item.size}mb</TableCell>
                   <TableCell>
-                    {item.preview_images ? (
-                      <img
-                        src={item.preview_images.split(',')[0]}
-                        alt=''
-                        className='h-10 w-16 rounded object-cover'
-                      />
-                    ) : (
-                      '-'
+                    {item.preview_images && (
+                      <ImagePreview images={item.preview_images.split(',')} alt={item.title} image_trigger={
+                        <img
+                          src={item.preview_images.split(',')[0]}
+                          alt=''
+                          className='h-10 w-16 rounded object-cover'
+                        />
+                      }></ImagePreview>
+
                     )}
                   </TableCell>
                   <TableCell>{item.downloader}</TableCell>

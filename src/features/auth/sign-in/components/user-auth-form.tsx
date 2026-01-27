@@ -58,10 +58,11 @@ export function UserAuthForm({
     const res = await login(data)
     if (res.code === 0) {
       auth.setAccessToken(res.data.access_token)
+      auth.setUsername(res.data.username)
       const targetPath = redirectTo || '/'
       toast.success(`欢迎回来, ${data.username}!`)
       await navigate({ to: targetPath, replace: true })
-    }else {
+    } else {
       toast.error(res.message)
     }
   }
@@ -77,7 +78,7 @@ export function UserAuthForm({
           control={form.control}
           name='username'
           render={({ field }) => (
-            <FormItem  className='relative'>
+            <FormItem className='relative'>
               <FormLabel>用户名</FormLabel>
               <FormControl>
                 <Input placeholder='' {...field} />

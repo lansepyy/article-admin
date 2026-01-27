@@ -1,22 +1,46 @@
-import { useEffect } from 'react'
-import * as z from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Save } from 'lucide-react'
+import { useEffect } from 'react';
+import * as z from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Save, Trash2 } from 'lucide-react';
 import { toast } from 'sonner'
-import { getConfig, postConfig } from '@/api/config.ts'
-import { Button } from '@/components/ui/button.tsx'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form.tsx'
-import { Input } from '@/components/ui/input.tsx'
-import { PathListInput } from '@/features/settings/downloader/path-input-list.tsx'
+import { deleteConfig, getConfig, postConfig } from '@/api/config.ts'
+import { Button } from '@/components/ui/button.tsx';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form.tsx';
+import { Input } from '@/components/ui/input.tsx';
+import { ConfirmButton } from '@/components/confirm-button.tsx';
+import { PathListInput } from '@/features/settings/downloader/path-input-list.tsx';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const thunderSchema = z.object({
   url: z.string().min(1, '输入地址'),
@@ -30,15 +54,16 @@ const thunderSchema = z.object({
 })
 
 type downloadValues = z.infer<typeof thunderSchema>
+const defaultValues= {
+    url: '',
+    authorization: '',
+    save_paths: [],
+  }
 
 export function Thunder({ downloaderId }: { downloaderId: string }) {
   const downloader = useForm<downloadValues>({
     resolver: zodResolver(thunderSchema),
-    defaultValues: {
-      url: '',
-      authorization: '',
-      save_paths: [],
-    },
+    defaultValues,
   })
   const queryClient = useQueryClient()
 
@@ -61,6 +86,16 @@ export function Thunder({ downloaderId }: { downloaderId: string }) {
       queryClient.invalidateQueries({ queryKey: ['downloaders'] })
     },
   })
+
+  const handleDeleteConfig = async () => {
+    const res = await deleteConfig('Downloader.' + downloaderId)
+    if (res.code === 0) {
+      toast.success(res.message)
+      queryClient.invalidateQueries({ queryKey: ['downloader', downloaderId] })
+      queryClient.invalidateQueries({ queryKey: ['downloaders'] })
+      downloader.reset(defaultValues)
+    }
+  }
 
   useEffect(() => {
     if (data) {
@@ -117,10 +152,18 @@ export function Thunder({ downloaderId }: { downloaderId: string }) {
           )}
         />
 
-        <Button type='submit'>
-          <Save />
-          保存配置
-        </Button>
+        <div className='flex gap-2'>
+          <Button type='submit'>
+            <Save />
+            保存配置
+          </Button>
+          <ConfirmButton
+            title="确认删除该配置"
+            variant='destructive'
+            triggerText={<Trash2 className='h-4 w-4' />}
+            onConfirm={handleDeleteConfig}
+          />
+        </div>
       </form>
     </Form>
   )

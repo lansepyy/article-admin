@@ -10,11 +10,11 @@ import {
   KeyRound,
 } from 'lucide-react'
 import { type SidebarData } from '../types'
-
+import { useAuthStore } from '@/stores/auth-store.ts'
+const { auth } = useAuthStore.getState()
 export const sidebarData: SidebarData = {
   user: {
-    name: 'envyafish',
-    avatar: '/avatars/shadcn.jpg',
+    name: auth.username,
   },
   navGroups: [
     {

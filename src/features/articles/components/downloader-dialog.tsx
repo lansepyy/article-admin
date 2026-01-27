@@ -97,7 +97,7 @@ export function DownloaderDialog({ articleId }: DownloaderDialogProps) {
       }
     },
     onSuccess: (res) => {
-      if(res.code === 0){
+      if (res.code === 0) {
         toast.success(res.message)
         setOpen(false)
         form.reset()
@@ -263,7 +263,7 @@ export function DownloaderDialog({ articleId }: DownloaderDialogProps) {
                               (pathObj, index) => (
                                 <div
                                   key={index}
-                                  className={`flex items-start space-x-3 rounded-md p-3 transition-all ${
+                                  className={`flex items-start space-x-3 rounded-md p-2 transition-all ${
                                     field.value === pathObj.path
                                       ? 'bg-primary/10'
                                       : 'hover:bg-muted/50'
@@ -280,7 +280,9 @@ export function DownloaderDialog({ articleId }: DownloaderDialogProps) {
                                   >
                                     <div className='flex items-center justify-between gap-2'>
                                       <span className='font-mono text-sm break-all'>
-                                        {pathObj.path}
+                                        {currentDownloader.id === 'thunder'
+                                          ? pathObj.label
+                                          : pathObj.path}
                                       </span>
                                       {field.value === pathObj.path && (
                                         <Check className='h-4 w-4 flex-shrink-0 text-primary' />
@@ -311,7 +313,11 @@ export function DownloaderDialog({ articleId }: DownloaderDialogProps) {
               >
                 取消
               </Button>
-              <Button type='submit' disabled={submitMutation.isPending} className="w-full">
+              <Button
+                type='submit'
+                disabled={submitMutation.isPending}
+                className='w-full'
+              >
                 {submitMutation.isPending ? (
                   <>
                     <div className='mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent' />

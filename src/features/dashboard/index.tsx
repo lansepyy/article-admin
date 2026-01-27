@@ -36,9 +36,10 @@ export function Dashboard() {
       {/* ===== Main ===== */}
       <Main>
         <div className='space-y-6 p-6'>
-          <RealmHint total={data?.reduce((sum, c) => sum + c.count, 0)}></RealmHint>
           <SummaryCards data={data ?? []} />
           <CategoryCards data={data ?? []} />
+          <RealmHint total={data?.reduce((sum, c) => sum + c.count, 0)}></RealmHint>
+
         </div>
       </Main>
     </>

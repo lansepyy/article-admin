@@ -17,6 +17,13 @@ export function getConfig<T>(key: string) {
   })
 }
 
+export function deleteConfig(key: string) {
+  return request({
+    url: `/config/${key}`,
+    method: 'delete',
+  })
+}
+
 export function postConfig(key: string, data: never) {
   return request({
     url: `/config/`,

@@ -199,7 +199,7 @@ export function DownloadLogTable() {
                   <TableCell>{item.tid}</TableCell>
                   <TableCell>{item.section}</TableCell>
                   <TableCell>{item.category}</TableCell>
-                  <TableCell className='max-w-[260px] truncate'>
+                  <TableCell>
                     {item.title}
                   </TableCell>
                   <TableCell>{item.size}mb</TableCell>

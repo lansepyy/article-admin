@@ -3,9 +3,9 @@ import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Save } from 'lucide-react'
+import { Save, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { getConfig, postConfig } from '@/api/config.ts'
+import { deleteConfig, getConfig, postConfig } from '@/api/config.ts'
 import { Button } from '@/components/ui/button.tsx'
 import {
   Form,
@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/form.tsx'
 import { Input } from '@/components/ui/input.tsx'
+import { ConfirmButton } from '@/components/confirm-button.tsx'
 import { PathListInput } from '@/features/settings/downloader/path-input-list.tsx'
 
 const commonDownloaderSchema = z.object({
@@ -31,16 +32,17 @@ const commonDownloaderSchema = z.object({
 })
 
 type downloadValues = z.infer<typeof commonDownloaderSchema>
+const defaultValues= {
+  url: '',
+  username: '',
+  password: '',
+  save_paths: [],
+}
 
 export function CommonDownloader({ downloaderId }: { downloaderId: string }) {
   const downloader = useForm<downloadValues>({
     resolver: zodResolver(commonDownloaderSchema),
-    defaultValues: {
-      url: '',
-      username: '',
-      password: '',
-      save_paths: [],
-    },
+    defaultValues,
   })
   const queryClient = useQueryClient()
 
@@ -53,8 +55,6 @@ export function CommonDownloader({ downloaderId }: { downloaderId: string }) {
     staleTime: 5 * 60 * 1000,
   })
 
-
-
   const updateMutation = useMutation({
     mutationFn: async (values: downloadValues) => {
       return await postConfig('Downloader.' + downloaderId, values as never)
@@ -63,8 +63,19 @@ export function CommonDownloader({ downloaderId }: { downloaderId: string }) {
       toast.success(res.message)
       queryClient.invalidateQueries({ queryKey: ['downloader', downloaderId] })
       queryClient.invalidateQueries({ queryKey: ['downloaders'] })
+      downloader.reset(defaultValues)
     },
   })
+
+  const handleDeleteConfig = async () => {
+    const res = await deleteConfig('Downloader.' + downloaderId)
+    if (res.code === 0) {
+      toast.success(res.message)
+      queryClient.invalidateQueries({ queryKey: ['downloader', downloaderId] })
+      queryClient.invalidateQueries({ queryKey: ['downloaders'] })
+      downloader.reset(defaultValues)
+    }
+  }
 
   useEffect(() => {
     if (data) {
@@ -75,7 +86,9 @@ export function CommonDownloader({ downloaderId }: { downloaderId: string }) {
   return (
     <Form {...downloader}>
       <form
-        onSubmit={downloader.handleSubmit((values) => updateMutation.mutate(values))}
+        onSubmit={downloader.handleSubmit((values) =>
+          updateMutation.mutate(values)
+        )}
         className='max-w-md space-y-4'
       >
         <FormField
@@ -130,11 +143,18 @@ export function CommonDownloader({ downloaderId }: { downloaderId: string }) {
             </FormItem>
           )}
         />
-
-        <Button type='submit'>
-          <Save />
-          保存配置
-        </Button>
+        <div className='flex gap-2'>
+          <Button type='submit'>
+            <Save />
+            保存配置
+          </Button>
+          <ConfirmButton
+            title="确认删除该配置"
+            variant='destructive'
+            triggerText={<Trash2 className='h-4 w-4' />}
+            onConfirm={handleDeleteConfig}
+          />
+        </div>
       </form>
     </Form>
   )

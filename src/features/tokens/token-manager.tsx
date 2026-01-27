@@ -1,63 +1,32 @@
 'use client'
 
-import { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Trash2, Plus, Copy, Zap, HelpCircle } from 'lucide-react'
-import { addToken, deleteToken, listToken } from '@/api/token.ts';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ConfirmButton } from '@/components/confirm-button.tsx';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import { addToken, deleteToken, listToken } from '@/api/token.ts'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { ConfirmButton } from '@/components/confirm-button.tsx'
 
 export default function TokenManager() {
   const [open, setOpen] = useState(false)
@@ -93,53 +62,90 @@ export default function TokenManager() {
   return (
     <div className='flex h-full flex-col overflow-hidden'>
       <div className='sticky top-0 z-10 mb-2'>
-        <div className="flex items-center justify-between rounded-2xl border p-4 shadow-sm md:p-6">
-          <div className="space-y-1">
-            <p className="flex items-center gap-1 text-xs text-muted-foreground md:text-sm">
-              <Zap className="h-3 w-3 fill-amber-500 text-amber-500" />
+        <div className='flex items-center justify-between rounded-2xl border p-4 shadow-sm md:p-6'>
+          <div className='space-y-1'>
+            <p className='flex items-center gap-1 text-xs text-muted-foreground md:text-sm'>
+              <Zap className='h-3 w-3 fill-amber-500 text-amber-500' />
               当前令牌数量: {data?.length}
             </p>
 
-            {/* ✅ 令牌使用方法 */}
             <Popover>
               <PopoverTrigger asChild>
-                <button className="flex items-center gap-1 text-xs text-primary hover:underline">
-                  <HelpCircle className="h-3 w-3" />
+                <button className='flex items-center gap-1 text-xs text-primary hover:underline'>
+                  <HelpCircle className='h-3 w-3' />
                   令牌使用方法
                 </button>
               </PopoverTrigger>
 
-              <PopoverContent className="w-80 text-sm">
-                <div className="space-y-2">
-                  <p className="font-medium">如何使用 API 令牌</p>
+              <PopoverContent className='w-80 text-sm' align="start">
+                <div className='space-y-2'>
+                  <p className='font-medium'>如何使用 API 令牌</p>
 
-                  <ol className="list-decimal space-y-1 pl-4 text-muted-foreground">
+                  <ol className='list-decimal space-y-1 pl-4 text-muted-foreground'>
                     <li>在请求 Header 中添加：</li>
                   </ol>
 
-                  <pre className="whitespace-pre-wrap break-all">
-{`X-API-Key: YOUR_API_TOKEN`}
-          </pre>
+                  <pre className='break-all whitespace-pre-wrap'>
+                    {`X-API-Key: YOUR_API_TOKEN`}
+                  </pre>
 
-                  <p className="text-xs text-muted-foreground">
+                  <p className='text-xs text-muted-foreground'>
                     示例（curl）：
                   </p>
 
-                  <pre className="whitespace-pre-wrap break-all">
-{`curl -H "X-API-Key: YOUR_API_TOKEN" https://api.example.com/v1/resource`}
-          </pre>
+                  <pre className='break-all whitespace-pre-wrap'>
+                    {`curl -H "X-API-Key: YOUR_API_TOKEN" https://api.example.com/v1/resource`}
+                  </pre>
+                </div>
+              </PopoverContent>
+            </Popover>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className='flex items-center gap-1 text-xs text-primary hover:underline'>
+                  <HelpCircle className='h-3 w-3' />
+                  目前开放接口
+                </button>
+              </PopoverTrigger>
+
+              <PopoverContent className='w-80 text-sm' align="start">
+                <div className='space-y-4'>
+                  <div className='font-medium text-foreground'>已开放接口</div>
+
+                  {/* 接口 1 */}
+                  <div className='rounded-md border p-3'>
+                    <div className='flex items-center justify-between'>
+                      <span className='font-mono text-xs text-muted-foreground'>
+                        GET /api/v1/articles/torrents
+                      </span>
+                      <span className='text-xs font-semibold text-green-600'>
+                        GET
+                      </span>
+                    </div>
+
+                    <div className='mt-2 text-xs text-muted-foreground'>
+                      获取磁力种子
+                    </div>
+
+                    <div className='mt-2'>
+                      <div className='text-xs font-medium'>参数</div>
+                      <ul className='mt-1 list-disc pl-4 text-xs text-muted-foreground'>
+                        <li>
+                          <code>keyword</code>：string（必填）
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </PopoverContent>
             </Popover>
           </div>
 
-          <Button onClick={() => setOpen(true)} className="gap-2">
-            <Plus className="h-4 w-4" /> 新建令牌
+          <Button onClick={() => setOpen(true)} className='gap-2'>
+            <Plus className='h-4 w-4' /> 新建令牌
           </Button>
         </div>
-
       </div>
-      <div className='flex-1 overflow-auto border rounded-lg'>
+      <div className='flex-1 overflow-auto rounded-lg border'>
         <Table>
           <TableHeader>
             <TableRow>
@@ -170,7 +176,7 @@ export default function TokenManager() {
                   {token.token_value}
                 </TableCell>
                 <TableCell>
-                  <div className="flex gap-2">
+                  <div className='flex gap-2'>
                     <Button
                       size='sm'
                       variant='default'

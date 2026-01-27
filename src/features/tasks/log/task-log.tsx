@@ -4,6 +4,11 @@ import { getTasks, pageTaskLog } from '@/api/task.ts'
 import { formatDateTime } from '@/lib/utils.ts'
 import { Badge } from '@/components/ui/badge.tsx'
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover.tsx'
+import {
   Select,
   SelectContent,
   SelectGroup,
@@ -19,11 +24,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table.tsx'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip.tsx'
 import { CommonPagination } from '@/components/pagination.tsx'
 
 const PAGE_SIZE = 20
@@ -57,7 +57,7 @@ export function TaskLogTable() {
         <Select
           value={filter.task_func}
           onValueChange={(v) =>
-            setFilter((prev) => ({ ...prev, task_func: v === 'all' ? '' : v}))
+            setFilter((prev) => ({ ...prev, task_func: v === 'all' ? '' : v }))
           }
         >
           <SelectTrigger className='w-full max-w-48'>
@@ -112,15 +112,15 @@ export function TaskLogTable() {
                 <TableCell>{formatDateTime(log.end_time)}</TableCell>
                 <TableCell>{log.execute_seconds}秒</TableCell>
                 <TableCell className='max-w-[300px] overflow-hidden'>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <span className='cursor-pointer truncate'>
                         {log.execute_result}
                       </span>
-                    </TooltipTrigger>
-                    <TooltipContent
+                    </PopoverTrigger>
+                    <PopoverContent
                       className='max-h-[400px] max-w-[600px] overflow-auto'
-                      side='left'
+                      align="start"
                     >
                       <pre className='text-xs whitespace-pre-wrap'>
                         {JSON.stringify(
@@ -129,8 +129,8 @@ export function TaskLogTable() {
                           2
                         )}
                       </pre>
-                    </TooltipContent>
-                  </Tooltip>
+                    </PopoverContent>
+                  </Popover>
                 </TableCell>
                 <TableCell>
                   <Badge
@@ -143,22 +143,21 @@ export function TaskLogTable() {
                     {log.success ? '成功' : '失败'}
                   </Badge>
                 </TableCell>
-                <TableCell>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
+                <TableCell className='max-w-[300px] overflow-hidden'>
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <span className='cursor-pointer truncate'>
                         {log.error}
                       </span>
-                    </TooltipTrigger>
-                    <TooltipContent
-                      className='max-h-[400px] max-w-[600px] overflow-auto'
-                      side='left'
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className='max-h-[400px] max-w-[600px] overflow-auto' align="start"
                     >
                       <pre className='text-xs whitespace-pre-wrap'>
                         {log.error}
                       </pre>
-                    </TooltipContent>
-                  </Tooltip>
+                    </PopoverContent>
+                  </Popover>
                 </TableCell>
               </TableRow>
             ))}

@@ -1,14 +1,7 @@
 import ReactECharts from 'echarts-for-react'
 import type { DownloadState, SectionCount } from '@/api/download-log.ts'
 import { useTheme } from '@/context/theme-provider.tsx'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from '@/components/ui/card'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
 
 const COLORS_LIGHT = [
   '#FF6B9D', // 玫瑰粉
@@ -95,6 +88,7 @@ function NightingaleChart({
   data: SectionCount[]
   title?: string
 }) {
+  const { theme } = useTheme()
   const option = {
     tooltip: {
       trigger: 'item',
@@ -110,24 +104,19 @@ function NightingaleChart({
           value: d.count,
         })),
         label: {
-          show: true,
-          formatter: '{b}',
+          color: theme === 'dark' ? '#fff' : '#333',
+          textBorderWidth: 2,
+          fontSize: 14,
+          fontWeight: 'bold',
         },
       },
     ],
   }
 
   return (
-    <Card className='w-full'>
-      {title && (
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-        </CardHeader>
-      )}
-      <CardContent className='h-[380px]'>
-        <ReactECharts style={{ height: '100%' }} option={option} />
-      </CardContent>
-    </Card>
+    <div className='h-[380px]'>
+      <ReactECharts style={{ height: '100%' }} option={option} />
+    </div>
   )
 }
 
@@ -154,11 +143,6 @@ export function DownloadDashboard({ data }: { data: DownloadState }) {
   return (
     <div className='grid gap-6 md:grid-cols-2'>
       <Card className='flex flex-col justify-center border-none bg-secondary/20 shadow-none'>
-        <CardHeader>
-          <CardTitle className='text-sm font-medium text-muted-foreground'>
-            吸纳灵力数量
-          </CardTitle>
-        </CardHeader>
         <CardContent>
           <div className='flex items-baseline gap-2'>
             <span className='text-5xl font-extrabold tracking-tight'>
@@ -238,12 +222,7 @@ export function DownloadDashboard({ data }: { data: DownloadState }) {
       </Card>
 
       <Card className='flex flex-col border-none shadow-none'>
-        <CardHeader className='items-center pb-2'>
-          <CardDescription className='text-center'>
-            属性越集中，资质越好
-          </CardDescription>
-        </CardHeader>
-        <CardContent className='h-[300px] w-full flex-1 pb-2'>
+        <CardContent>
           <NightingaleChart data={data.section_count} title={'灵根分布'} />
         </CardContent>
         <CardFooter className='flex-col gap-2 text-center text-xs text-muted-foreground italic'></CardFooter>

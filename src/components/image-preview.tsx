@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import * as React from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import 'react-medium-image-zoom/dist/styles.css'
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 import { Button } from '@/components/ui/button.tsx'
 import { ResponsiveModal } from '@/components/response-modal.tsx'
 
@@ -22,14 +24,45 @@ export function ImagePreview({
   const prevImage = () => {
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
   }
+  const [open, setOpen] = useState(false)
+
   return (
-    <ResponsiveModal title='图片预览' trigger={image_trigger}>
+    <ResponsiveModal title='图片预览' trigger={image_trigger} disableSwipe={true}>
       <div className='relative rounded-lg bg-black/95 p-4'>
-        <img
-          src={images[currentIndex]}
-          alt={`${alt}-${currentIndex}`}
-          className='max-h-[80vh] max-w-[90vw] rounded-lg object-contain'
-        />
+        <div onClick={() => setOpen(true)}>
+          <TransformWrapper
+            pinch={{ disabled: false }}
+            doubleClick={{ disabled: true }}>
+            <TransformComponent>
+              <img
+                src={images[currentIndex]}
+                alt={`${alt}-${currentIndex}`}
+                className='max-h-[80vh] max-w-[90vw] rounded-lg object-contain'
+              />
+            </TransformComponent>
+          </TransformWrapper>
+        </div>
+
+        {open && (
+          <div
+            className='bg-opacity-90 fixed inset-0 z-50 flex items-center justify-center bg-black'
+            onClick={() => setOpen(false)}
+          >
+            <TransformWrapper
+              pinch={{ disabled: false }}
+              doubleClick={{ disabled: true }}
+              wheel={{ disabled: false }}
+            >
+              <TransformComponent>
+                <img
+                  src={images[currentIndex]}
+                  alt={`${alt}-${currentIndex}`}
+                  className='max-h-full max-w-full object-contain'
+                />
+              </TransformComponent>
+            </TransformWrapper>
+          </div>
+        )}
 
         {/* 图片导航 */}
         {images.length > 1 && (

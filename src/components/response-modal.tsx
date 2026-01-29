@@ -24,6 +24,7 @@ interface ResponsiveModalProps {
   trigger?: React.ReactNode
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  disableSwipe?: boolean
 }
 
 export function ResponsiveModal({
@@ -33,16 +34,15 @@ export function ResponsiveModal({
   trigger,
   open,
   onOpenChange,
+  disableSwipe,
 }: ResponsiveModalProps) {
   const isMobile = useIsMobile()
 
-
-
   if (!isMobile) {
     return (
-      <Dialog open={open} onOpenChange={onOpenChange} key="dialog">
+      <Dialog open={open} onOpenChange={onOpenChange} key='dialog'>
         {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-        <DialogContent className='w-auto max-w-none sm:max-w-none min-w-md'>
+        <DialogContent className='w-auto max-w-none min-w-md sm:max-w-none'>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{description}</DialogDescription>
@@ -54,7 +54,12 @@ export function ResponsiveModal({
   }
 
   return (
-    <Drawer open={open} onOpenChange={onOpenChange} key="drawer">
+    <Drawer
+      open={open}
+      onOpenChange={onOpenChange}
+      key='drawer'
+      handleOnly={disableSwipe}
+    >
       {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
       <DrawerContent className='px-4 py-4'>
         <DrawerHeader className='text-left'>
